@@ -49,7 +49,7 @@ export default function CreatePage() {
       });
 
     if (uploadError) {
-      console.error("❌ Error al subir imagen:", uploadError.message, uploadError.error);
+      console.error("❌ Error al subir imagen:", uploadError.message);
       throw new Error(uploadError.message || JSON.stringify(uploadError));
     }
 

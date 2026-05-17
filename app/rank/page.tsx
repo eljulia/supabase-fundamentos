@@ -132,7 +132,7 @@ export default function RankPage() {
             ...p,
             image_url: p.imagen_url,
             isLiked: false,
-            user: p.user ?? null,
+            user: undefined,
           }));
         setPosts(mapped);
       }
