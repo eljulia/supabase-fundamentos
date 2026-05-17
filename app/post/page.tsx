@@ -49,8 +49,8 @@ export default function CreatePage() {
       });
 
     if (uploadError) {
-      console.error("❌ Error al subir imagen:", uploadError);
-      throw uploadError;
+      console.error("❌ Error al subir imagen:", uploadError.message, uploadError.error);
+      throw new Error(uploadError.message || JSON.stringify(uploadError));
     }
 
     // 3️⃣ Obtener URL pública
@@ -62,20 +62,20 @@ export default function CreatePage() {
 
     console.log("📸 Imagen subida:", publicUrl);
 
-    // 4️⃣ Crear el post en la tabla posts_new
+    // 4️⃣ Crear el post en la tabla post_new
     const { data: postData, error: postError } = await supabase
-      .from("posts_new")
+      .from("post_new")
       .insert({
         user_id: userId,
-        image_url: publicUrl,
+        imagen_url: publicUrl,
         caption: caption,
         likes: 0,
       })
       .select("*");
 
     if (postError) {
-      console.error("❌ Error creando el post:", postError);
-      throw postError;
+      console.error("❌ Error creando el post:", postError.message, postError.details, postError.hint, postError.code);
+      throw new Error(postError.message || postError.details || JSON.stringify(postError));
     }
 
     console.log("🆕 Post creado:", postData);
@@ -124,7 +124,7 @@ export default function CreatePage() {
       <header className="sticky top-0 z-40 bg-card-bg border-b border-border">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-center">
           <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Crear Post
+            🐾 Crear Post
           </h1>
         </div>
       </header>
@@ -191,7 +191,7 @@ export default function CreatePage() {
                   </svg>
                 </div>
                 <span className="text-foreground/60 text-sm">
-                  Haz clic para seleccionar una imagen
+                  Sube una foto de tu mascota
                 </span>
               </label>
             )}
@@ -212,7 +212,7 @@ export default function CreatePage() {
               id="caption"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              placeholder="Escribe algo sobre tu foto..."
+              placeholder="Cuéntanos algo sobre tu mascota..."
               rows={3}
               className="w-full px-4 py-3 rounded-xl bg-card-bg border border-border text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
             />

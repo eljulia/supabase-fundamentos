@@ -53,7 +53,7 @@ function PostCard({
           <Image
             src={
               post.user?.avatar ||
-              "https://xynshcnkxdliapebmyaz.supabase.co/storage/v1/object/public/images/posts/unnamed-14.jpg"
+              "https://i.pravatar.cc/150?img=0"
             }
             alt={post.user?.username || "default_user"}
             fill
@@ -65,7 +65,7 @@ function PostCard({
             {post.user?.username || "default_user"}
           </span>
           <span className="text-xs text-foreground/50">
-            {getTimeAgo(new Date(post.created_at))}
+            {getTimeAgo(post.created_at)}
           </span>
         </div>
       </div>
@@ -128,14 +128,31 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await supabase
-        .from("posts_new")
+        .from("post_new")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error al obtener los posts:", error);
+        console.error("Error al obtener los posts:", error.message, error.details, error.code);
       } else {
-        setPosts(data);
+        const isValidUrl = (url: string) => {
+          try {
+            const parsed = new URL(url);
+            return parsed.protocol === "http:" || parsed.protocol === "https:";
+          } catch {
+            return false;
+          }
+        };
+
+        const mapped = data
+          .filter((p) => p.imagen_url && isValidUrl(p.imagen_url))
+          .map((p) => ({
+            ...p,
+            image_url: p.imagen_url,
+            isLiked: false,
+            user: p.user ?? null,
+          }));
+        setPosts(mapped);
       }
     };
 
@@ -148,7 +165,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-card-bg border-b border-border">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-center">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Suplatzigram
+            🐾 Pets Media
           </h1>
         </div>
       </header>

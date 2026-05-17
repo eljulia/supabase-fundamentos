@@ -62,7 +62,7 @@ function Modal({
         <div className="flex items-center gap-3 p-4 border-b border-border">
           <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary">
             <Image
-              src={post.user?.avatar || "https://xynshcnkxdliapebmyaz.supabase.co/storage/v1/object/public/images/posts/unnamed-14.jpg"}
+              src={post.user?.avatar || "https://i.pravatar.cc/150?img=0"}
               alt={post.user?.username || "default_user"}
               fill
               className="object-cover"
@@ -70,7 +70,7 @@ function Modal({
           </div>
           <div className="flex flex-col">
             <span className="font-semibold text-foreground">{post.user?.username || "default_user"}</span>
-            <span className="text-xs text-foreground/50">{getTimeAgo(new Date(post.created_at))}</span>
+            <span className="text-xs text-foreground/50">{getTimeAgo(post.created_at)}</span>
           </div>
         </div>
 
@@ -110,16 +110,31 @@ export default function RankPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await supabase
-        .from("posts_new")
-        .select("id, image_url, caption, likes, user_id, created_at")
-        .gt("likes", 5)
-        .order("likes", { ascending: false })
+        .from("post_new")
+        .select("id, imagen_url, caption, likes, user_id, created_at")
+        .order("likes", { ascending: false });
 
       if (error) {
-        console.error("Error al obtener los posts:", error);
+        console.error("Error al obtener los posts:", error.message, error.details, error.code);
       } else {
-        console.log("Posts obtenidos:", data);
-        setPosts(data);
+        const isValidUrl = (url: string) => {
+          try {
+            const parsed = new URL(url);
+            return parsed.protocol === "http:" || parsed.protocol === "https:";
+          } catch {
+            return false;
+          }
+        };
+
+        const mapped = data
+          .filter((p) => p.imagen_url && isValidUrl(p.imagen_url))
+          .map((p) => ({
+            ...p,
+            image_url: p.imagen_url,
+            isLiked: false,
+            user: p.user ?? null,
+          }));
+        setPosts(mapped);
       }
     };
 
@@ -132,7 +147,7 @@ export default function RankPage() {
       <header className="sticky top-0 z-40 bg-card-bg border-b border-border">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-center">
           <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Ranking
+            🏆 Top Mascotas
           </h1>
         </div>
       </header>
