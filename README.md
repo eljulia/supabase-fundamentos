@@ -2,8 +2,6 @@
 
 **Pets Media** es una red social estilo Instagram diseñada exclusivamente para mascotas y sus dueños. Comparte fotos de tu peludo favorito, dale likes a las publicaciones de otros, y descubre las mascotas más populares en el ranking.
 
-Construida con **Next.js** y **Supabase** como parte del [Curso de Supabase en Platzi](https://platzi.com).
-
 ---
 
 ## Funcionalidades
