@@ -1,7 +1,7 @@
 # 🐾 Pets Media
 
 **Pets Media** es una red social estilo Instagram diseñada exclusivamente para mascotas y sus dueños. Comparte fotos de tu peludo favorito, dale likes a las publicaciones de otros, y descubre las mascotas más populares en el ranking.
-https://supabase-fundamentos-hrad.vercel.app/
+
 ---
 
 ## Funcionalidades
@@ -10,6 +10,7 @@ https://supabase-fundamentos-hrad.vercel.app/
 - **Crear post** — Sube una foto de tu mascota con un caption desde tu dispositivo.
 - **Top Mascotas** — Ranking de las publicaciones con más likes en formato grilla.
 - **Likes** — Reacciona a las publicaciones que más te gusten.
+- - **URL** — https://supabase-fundamentos-hrad.vercel.app/
 
 ## Tecnologías
 
